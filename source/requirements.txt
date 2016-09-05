@@ -1,0 +1,6 @@
+# Framework
+Django==1.10
+
+# Libs 
+djangorestframework==3.4.6
+#djangorestframework-jwt==1.8
