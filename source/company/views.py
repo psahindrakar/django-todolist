@@ -24,7 +24,7 @@ class CompanyList(APIView):
             val = set(request.query_params[param_key].split(","))
             kwargs[param_key] = val
         
-        default_page_size = 5
+        default_page_size = 10
         param_key = 'page_size'
         page_size = default_page_size
         if param_key in request.query_params.keys():
@@ -72,36 +72,40 @@ class CompanyList(APIView):
         return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
-class CompanyDetail(APIView):
-    def get_object(self, pk):
-        try:
-            return Company.objects.get(pk=pk)
-        except Company.DoesNotExist:
-            raise Http404
+class CompanyDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
 
-    def get(self, request, pk, format=None):
-        company = self.get_object(pk)
-        company = CompanySerializer(company)
-        return Response(company.data)
+# class CompanyDetail(APIView):
+#     def get_object(self, pk):
+#         try:
+#             return Company.objects.get(pk=pk)
+#         except Company.DoesNotExist:
+#             raise Http404
 
-    def put(self, request, pk, format=None):
-        company = self.get_object(pk)
-        serializer = CompanySerializer(company, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+#     def get(self, request, pk, format=None):
+#         company = self.get_object(pk)
+#         company = CompanySerializer(company)
+#         return Response(company.data)
 
-    def delete(self, request, pk, format=None):
-        company = self.get_object(pk)
-        company.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#     def put(self, request, pk, format=None):
+#         company = self.get_object(pk)
+#         serializer = CompanySerializer(company, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-    # http://www.django-rest-framework.org/api-guide/serializers/#partial-updates
-    def patch(self, request, pk):
-        company = self.get_object(pk)
-        serializer = DynamicCompanySerializer(company, data=request.data, partial=True) # set partial=True to update a data partially
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+#     def delete(self, request, pk, format=None):
+#         company = self.get_object(pk)
+#         company.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
+#     # http://www.django-rest-framework.org/api-guide/serializers/#partial-updates
+#     def patch(self, request, pk):
+#         company = self.get_object(pk)
+#         serializer = DynamicCompanySerializer(company, data=request.data, partial=True) # set partial=True to update a data partially
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
