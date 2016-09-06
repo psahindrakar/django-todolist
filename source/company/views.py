@@ -1,12 +1,18 @@
 import json
+import django_filters
+
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import Http404
+from rest_framework import filters
+from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+# status codes => http://www.django-rest-framework.org/api-guide/status-codes/
 from rest_framework import status
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from django.http import Http404
 from .serializers import CompanySerializer, DynamicCompanySerializer
 from .models import Company
+
 
 class CompanyList(APIView):    
     def get(self, request, format=None):
@@ -63,7 +69,7 @@ class CompanyList(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
 
 class CompanyDetail(APIView):
@@ -84,9 +90,18 @@ class CompanyDetail(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
     def delete(self, request, pk, format=None):
         company = self.get_object(pk)
         company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    # http://www.django-rest-framework.org/api-guide/serializers/#partial-updates
+    def patch(self, request, pk):
+        company = self.get_object(pk)
+        serializer = DynamicCompanySerializer(company, data=request.data, partial=True) # set partial=True to update a data partially
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)

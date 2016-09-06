@@ -29,10 +29,10 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'todolist.pagination.CustomPagination',
-    'PAGE_SIZE': 5
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_PAGINATION_CLASS': 'todolist.pagination.CustomPagination',
+#     'PAGE_SIZE': 5
+# }
 
 
 INSTALLED_APPS = [
