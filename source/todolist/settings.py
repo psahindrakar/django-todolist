@@ -24,6 +24,7 @@ SECRET_KEY = '#+7m-buogi)+qcl0#&h&v81hs(^ola3b8#$ge&itu5-&&u#bgp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+MEDIA_ROOT = "/home/psahindrakar/Documents/projects/django-todolist/"
 
 ALLOWED_HOSTS = []
 

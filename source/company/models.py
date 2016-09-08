@@ -32,6 +32,11 @@ class CompanyStatusEnum(Enum):
     pending_info = 'Pending Info'
     inactive = 'Inactive'
     active = 'Active'
+    
+
+def company_file_storage_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return 'uploads/company_{0}/{1}'.format(instance.id, filename)
 
 
 class Company(models.Model):
@@ -43,8 +48,9 @@ class Company(models.Model):
 
     name = models.CharField(max_length=45)
     website = models.CharField(max_length=150)
-    # status = EnumField(values=('Pending Info', 'Inactive', 'Active'))
     status = models.CharField(max_length=25, choices=COMPANY_STATUS, default=CompanyStatusEnum.pending_info.value)
-
+    # https://docs.djangoproject.com/en/1.10/ref/models/fields/#django.db.models.FileField
+    insurance_file = models.FileField(blank=True, default='', upload_to=company_file_storage_path)
+    
     def __str__(self):
         return self.name

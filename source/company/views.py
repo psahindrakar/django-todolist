@@ -2,13 +2,11 @@ import json
 import django_filters
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http import Http404
-from rest_framework import filters
-from rest_framework import generics
+from django.http import Http404, HttpResponse
+# status codes => http://www.django-rest-framework.org/api-guide/status-codes/
+from rest_framework import filters, generics, viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-# status codes => http://www.django-rest-framework.org/api-guide/status-codes/
-from rest_framework import status
 
 from .serializers import CompanySerializer, DynamicCompanySerializer
 from .models import Company
@@ -76,6 +74,22 @@ class CompanyDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
 
+
+class CompanyInsuranceFile(viewsets.ReadOnlyModelViewSet):
+    def get_object(self, pk):
+        try:
+            return Company.objects.get(pk=pk)
+        except Company.DoesNotExist:
+            raise Http404
+
+    def retrieve(self, request, pk=None):
+        company = self.get_object(pk)
+        filename = company.insurance_file.name.split('/')[-1]
+        response = HttpResponse(company.insurance_file, content_type='text/plain')
+        response['Content-Disposition'] = 'attachment; filename=%s' % filename
+        return response
+
+
 # class CompanyDetail(APIView):
 #     def get_object(self, pk):
 #         try:
@@ -85,8 +99,8 @@ class CompanyDetail(generics.RetrieveUpdateDestroyAPIView):
 
 #     def get(self, request, pk, format=None):
 #         company = self.get_object(pk)
-#         company = CompanySerializer(company)
-#         return Response(company.data)
+#         company_ser = CompanySerializer(company)
+#         return Response(company_ser.data)
 
 #     def put(self, request, pk, format=None):
 #         company = self.get_object(pk)
