@@ -7,12 +7,15 @@ from django.http import Http404, HttpResponse
 from rest_framework import filters, generics, viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .serializers import CompanySerializer, DynamicCompanySerializer
 from .models import Company
 
 
 class CompanyList(APIView):    
+    permission_classes = (IsAuthenticated, )
+
     def get(self, request, format=None):
         companies = Company.objects.all()
 
@@ -73,6 +76,7 @@ class CompanyList(APIView):
 class CompanyDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
+    permission_classes = (AllowAny, )
 
 
 class CompanyInsuranceFile(viewsets.ReadOnlyModelViewSet):

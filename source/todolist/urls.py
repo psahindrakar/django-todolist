@@ -20,4 +20,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^companies/', include('company.urls')),
     url(r'^users/', include('usertasks.urls')),
+
+    url(r'^auth/', include('rest_auth.urls'))
 ]
