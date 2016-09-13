@@ -1,0 +1,55 @@
+version: '2'
+
+services:
+
+    todo_web:
+        build: ./source
+        container_name: todo_web 
+        restart: always
+        expose:
+            - "8000"
+        links:
+          - todo_mysql:mysql
+        #   - redis:redis
+        volumes:
+            - /usr/src/app
+        env_file: .env
+        environment:
+            DEBUG: 'true'
+        command: /usr/local/bin/gunicorn todolist.wsgi:application -w 2 -b :8000
+
+
+    todo_nginx:
+        build: ./nginx/
+        container_name: todo_nginx
+        restart: always
+        ports:
+            - "80:80"
+        volumes:
+            - /www/static
+        volumes_from:
+            - todo_web
+        links:
+        - todo_web:web
+
+
+    todo_mysql_data:
+        image: mysql:5.7
+        container_name: todo_mysql_data
+        restart: always 
+        entrypoint: /bin/bash
+
+
+    todo_mysql:
+        image: mysql:5.7
+        container_name: todo_mysql
+        restart: always
+        ports:
+            - "3306:8050"
+        volumes_from:
+            - todo_mysql_data
+        environment:
+            MYSQL_DATABASE: todo_app
+            MYSQL_USER: todo_user
+            MYSQL_PASSWORD: todo@2016!
+            MYSQL_ROOT_PASSWORD: Selenite#1
