@@ -21,5 +21,5 @@ urlpatterns = [
     url(r'^companies/', include('company.urls')),
     url(r'^users/', include('usertasks.urls')),
 
-    url(r'^auth/', include('rest_auth.urls'))
+    url(r'^auth/', include('authentication.urls'))
 ]
