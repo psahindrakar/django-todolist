@@ -10,7 +10,6 @@ services:
             - "8000"
         links:
           - todo_mysql:mysql
-        #   - redis:redis
         volumes:
             - /usr/src/app
         env_file: .env

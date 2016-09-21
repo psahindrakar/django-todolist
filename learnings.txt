@@ -1,0 +1,107 @@
+Getting started with Django : http://blog.kevinastone.com/
+
+Initally trying out django with gloab installation - 
+python3 installed by default on ubuntu 16.04
+Installed pip3 - package manager for python : sudo apt-get install python3-pip
+Installed django globally for python3 : pip3 install django
+Check version of installed django : python3 -m django --version
+Django is installed locally at : /home/psahindrakar/.local/lib/python3.5/site-packages
+
+Without adding django-admin to path directly created project using - 
+/home/psahindrakar/.local/lib/python3.5/site-packages/django/bin/django-admin.py startproject mysite
+
+Create a new app in the project : python manage.py startapp polls
+Change your models (in models.py).
+Run python manage.py makemigrations to create migrations for those changes
+Run python manage.py migrate to apply those changes to the database.
+
+Interactive mode on a project for populating data : python manage.py shell
+
+Creating a superusr : python manage.py createsuperuser
+
+Python url patterns : http://tutorial.djangogirls.org/en/django_urls/
+
+Django REST api : http://www.django-rest-framework.org/
+
+Django building queries : https://docs.djangoproject.com/en/1.10/topics/db/queries/
+Django Models : https://docs.djangoproject.com/en/1.10/ref/models/
+Django QuerySet : https://docs.djangoproject.com/en/1.10/ref/models/querysets/#queryset-api
+Prepopulating database : https://docs.djangoproject.com/en/1.8/howto/initial-data/
+
+Many to many via a table : http://stackoverflow.com/questions/12567151/how-to-add-column-in-manytomany-table-django
+
+book = Book.objects.all()[0]
+author = book.authors.all()[0]
+author_books = author.book_set.all()
+
+Ask only for required fields on the API with django : http://stackoverflow.com/questions/23643204/django-rest-framework-dynamically-return-subset-of-fields 
+
+Running tests in django : python3 manage.py test polls
+
+Cron job with django : https://github.com/tivix/django-cron
+Django swagger : http://www.django-rest-framework.org/topics/documenting-your-api/
+https://quickrivision.wordpress.com/2015/11/08/an-introduction-to-using-swagger-with-your-django-app-a-tutorial/
+
+Do's and Dont's with Django : http://www.slideshare.net/accavdar/django-best-practices-46944311
+User profile image upload with django : http://www.machinalis.com/blog/image-fields-with-django-rest-framework/
+
+JWT for django : https://github.com/GetBlimp/django-rest-framework-jwt
+
+python manage.py validate
+The validate command checks whether your models’ syntax and logic are correct. If all is well, you’ll 
+see the message 0 errors found.
+
+python manage.py sqlall books
+The sqlall command doesn’t actually create the tables or otherwise touch your database – it just prints
+output to the screen so you can see what SQL Django would execute if you asked it.
+
+python manage.py syncdb
+The syncdb command is a simple “sync” of your models to your database. It looks at all of the models in
+each app in your INSTALLED_APPS setting, checks the database to see whether the appropriate tables exist
+yet, and creates the tables if they don’t yet exist. 
+
+Django default user module
+>>> from django.contrib.auth.models import User
+>>> user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+
+WHY test driven : http://toastdriven.com/blog/2011/apr/10/guide-to-testing-in-django/
+
+PROBLEM Mixing up django version can cause sometimes => Invalid template library specified. ImportError raised when trying to load 'django.templatetags.future':
+http://stackoverflow.com/questions/38931998/django-upgrade-1-9-1-10-error-with-removedindjango110warning-import
+Clear django version in that case and clean install 
+
+Going to the depth of the model : http://stackoverflow.com/questions/14573102/how-do-i-include-related-model-fields-using-django-rest-framework
+
+https://docs.djangoproject.com/en/1.10/ref/models/fields/#foreignkey
+properties on models.ForeignKey()
+on_delete=models.CASCADE
+related_name='entityname'
+related_query_name="tag"
+
+ManyToManyField.through¶
+Django will automatically generate a table to manage many-to-many relationships. However, if you want to manually specify the intermediary table,
+you can use the through option to specify the Django model that represents the intermediate table that you want to use.
+
+Learning Serializers : http://www.django-rest-framework.org/api-guide/serializers/
+Learning Filtering : http://www.django-rest-framework.org/api-guide/filtering/
+Learning JWT : http://stackoverflow.com/questions/21317899/how-do-i-create-a-login-api-using-django-rest-framework
+http://getblimp.github.io/django-rest-framework-jwt/
+http://zqpythonic.qiniucdn.com/data/20141006233346/index.html
+
+
+Fixtures for seeding inital data in django 
+- Store a a json file with data in a fixtures directory inside your app.
+Loading data is easy: just call manage.py loaddata <fixturename>, where <fixturename> is the name of the fixture file you’ve created. Each time you run loaddata, the data will be read from the fixture and re-loaded into the database. Note this means that if you change one of the rows created by a fixture and then run loaddata again, you’ll wipe out any changes you’ve made.
+
+python3 manage.py dumpdata
+
+Creating custom permission in Django : http://www.django-rest-framework.org/api-guide/permissions/#examples
+Django setting explained : https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
+
+Django in production : 
+http://www.robgolding.com/blog/2011/11/12/django-in-production-part-1---the-stack/
+
+Configuring Nginx + Gunicorn :
+https://realpython.com/blog/python/django-development-with-docker-compose-and-machine/
+
+
